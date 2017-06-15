@@ -1,10 +1,28 @@
-package oop.ex6.main;
+package oop.ex6.main.RAMCollection;
 
 /**
  * Created by Admin on 15-Jun-17.
  */
 public class Ram {
-    private String type,name,argType,value,modifier;
+    private String type,name,argType,value,modifier,scope;
+    public Ram(){
+        scope = "local";
+        type = null;
+        name = null;
+        argType = null;
+        value = null;
+        modifier = null;
+    }
+    public void setScopeToGlobal(){
+        scope = "global";
+    }
+    public void setScopeToLocal(){
+        scope = "local";
+    }
+
+    public String getScope() {
+        return scope;
+    }
 
     public String getArgType() {
         return argType;

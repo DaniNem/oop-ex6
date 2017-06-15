@@ -1,4 +1,4 @@
-package oop.ex6.main;
+package oop.ex6.main.Validator;
 
 /**
  * Created by Admin on 15-Jun-17.
