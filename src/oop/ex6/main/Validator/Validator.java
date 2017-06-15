@@ -1,6 +1,6 @@
 package oop.ex6.main.Validator;
 
-import oop.ex6.main.RAMCollection.Ram;
+import oop.ex6.main.RAMCollection.RamCollection;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -10,7 +10,7 @@ import java.util.Iterator;
  */
 public interface Validator{
     public abstract boolean isTriggered(String line);
-    public abstract void setParams(Collection<Ram> params);
+    public abstract void setParams(RamCollection params);
     public abstract Collection<ValidatorResult> doAction(Iterator<String> lines);
     public abstract Validator clone();
     
