@@ -4,9 +4,7 @@ import com.sun.deploy.security.ValidationState;
 import oop.ex6.main.RAMCollection.RamCollection;
 import oop.ex6.main.RAMCollection.Variable;
 
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +14,6 @@ import java.util.regex.Pattern;
  */
 public class DeclareIntValidator extends DeclareVariableValidator{
     private String line;
-    private Variable variable;
     private Pattern trigger;
     private Matcher matcher;
     boolean hasError = false;
@@ -40,9 +37,7 @@ public class DeclareIntValidator extends DeclareVariableValidator{
         if (!isDeclare())
             hasError = true;
 
-
-
-        String[] vars = line.split("\\s*,\\s*");
+        String [] vars = getVar(line);
         for (String i: vars){
 
         }
