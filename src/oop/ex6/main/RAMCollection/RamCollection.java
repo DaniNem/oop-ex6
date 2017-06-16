@@ -16,8 +16,9 @@ public class RamCollection  {
         this.functions = new ArrayList<Function>();
     }
 
-    public void addFunction(String funName,Iterable<Variable> funVars){
+    public void addFunction(String funName,Iterable<Variable> funVars,String code){
         Function newFunc = new Function(funName);
+        newFunc.setCode(code);
         for (Variable var:funVars) {
             newFunc.addVar(var);
         }

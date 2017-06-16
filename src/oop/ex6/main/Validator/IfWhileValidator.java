@@ -1,37 +1,30 @@
 package oop.ex6.main.Validator;
 
-import oop.ex6.main.RAMCollection.Function;
 import oop.ex6.main.RAMCollection.RamCollection;
-import oop.ex6.main.RAMCollection.Variable;
 
 import java.util.Iterator;
-import java.util.regex.Pattern;
 
 /**
- * Created by Admin on 15-Jun-17.
+ * Created by Admin on 16-Jun-17.
  */
-public class DefinedMethodValidator implements Validator{
-    private RamCollection localRam;
-    private Function currentFunction;
-    private String curLine;
+public class IfWhileValidator implements Validator{
+    String curLine;
+    RamCollection localRam;
     @Override
     public boolean isTriggered(String line) {
-        String Prefix = "^void\\s[^_][\\w]*+[(]+[\\w\\s]*+[)]+[{]$";
-        if (line.matches(Prefix)){
-            this.curLine = line;
-            return true;
-        }
-        return false;
+        curLine = line;
+        String pattern  = "^(if|while)+\\s*+\\(+[\\w\\s]+\\)+\\s*+\\{$";
+        return line.matches(pattern);
     }
 
     @Override
     public void setParams(RamCollection params) {
-
+        this.localRam = params;
     }
 
     @Override
     public boolean doAction(Iterator<String> lines) {
-        String funcName = this.curLine.replaceAll("^void+\\s", "").replaceAll("\\(+.*","");
+        String condition = this.curLine.replaceAll("^(if|while)+\\s*+\\(", "").replaceAll("\\)+.*+\\{","");
         String calledVars =curLine.replaceAll("^[a-zA-Z\\s]*+[(]", "")
                 .replaceAll("[)]+[{]$", "");
         String[] vars = curLine.split(",");
@@ -57,14 +50,10 @@ public class DefinedMethodValidator implements Validator{
             code += nextLine + '\n';
         }
         if(code.length()==0)throw new Exception("End of file.. no closing...");
-
-        this.localRam.addFunction(funcName,funcVars,code);
-
-
-        return true;
     }
 
-    public DefinedMethodValidator clone(){
-        return new DefinedMethodValidator();
+    @Override
+    public Validator clone() {
+        return null;
     }
 }

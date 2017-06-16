@@ -17,7 +17,11 @@ public class CallMethodValidator implements Validator{
     private Function currentFunction;
     private String curLine;
     public CallMethodValidator clone(){
-        return new CallMethodValidator();
+        CallMethodValidator retVal =  new CallMethodValidator();
+        retVal.localRam = this.localRam;
+        retVal.currentFunction = this.currentFunction;
+        retVal.curLine = this.curLine;
+        return retVal;
     }
     public void setParams(RamCollection ram){
         this.localRam = ram;
