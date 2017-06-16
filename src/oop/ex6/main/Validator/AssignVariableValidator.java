@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 /**
  * Created by shani on 15/06/2017.
  */
-public class AssignVariable implements Validator {
+public class AssignVariableValidator implements Validator {
     private final String EQUALS_SIGN = "=";
     String line;
 
@@ -24,7 +24,6 @@ public class AssignVariable implements Validator {
     public void setParams(RamCollection params){
         String[] param = line.split(EQUALS_SIGN);
         if (params.hasVariable(param[0])){
-
         }
 
     }
@@ -34,8 +33,6 @@ public class AssignVariable implements Validator {
     }
 
     public Validator clone(){
-        return new AssignVariable();
+        return new AssignVariableValidator();
     }
-
-
 }
