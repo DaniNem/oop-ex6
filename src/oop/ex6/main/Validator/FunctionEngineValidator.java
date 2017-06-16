@@ -6,16 +6,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by Admin on 15-Jun-17.
+ * Created by Admin on 16-Jun-17.
  */
-public class EngineValidartor implements Validator{
+public class FunctionEngineValidator implements Validator{
     private ArrayList< Validator> simpleValidators;
     private RamCollection ram;
 
     public EngineValidartor(){
         simpleValidators.add(new AssignVariable());
         simpleValidators.add(new DeclareVaribleEngineValidator() );
-        simpleValidators.add(new DefinedMethodValidator());
+        simpleValidators.add(new ReturnValidator());
+        //What is end of line?
+        //simpleValidators.add(new EndLineValidator());
+        simpleValidators.add(new IfWhileValidator());
+        simpleValidators.add(new OpenBlockValidator());
+        simpleValidators.add(new CloseBlockValidator());
+
     }
     @Override
     public boolean isTriggered(String line) {
@@ -44,9 +50,3 @@ public class EngineValidartor implements Validator{
         }
         return true;
     }
-
-    @Override
-    public Validator clone() {
-        return null;
-    }
-}

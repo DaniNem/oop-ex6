@@ -32,11 +32,17 @@ public class DefinedMethodValidator implements Validator{
     @Override
     public boolean doAction(Iterator<String> lines) {
         String funcName = this.curLine.replaceAll("^void+\\s", "").replaceAll("\\(+.*","");
+        Function curFunc = this.localRam.addFunction(funcName);
+        curFunc.addCodeLine(this.curLine);
         String calledVars =curLine.replaceAll("^[a-zA-Z\\s]*+[(]", "")
                 .replaceAll("[)]+[{]$", "");
         String[] vars = curLine.split(",");
         //blockofcode working on making string to vars;
+
         throw new Exception("Finish on this...");
+        //curFunc.addVar();
+
+
         String code = "";
         int openSocpeCounter = 0;
         Validator close = new CloseBlockValidator();
@@ -54,11 +60,9 @@ public class DefinedMethodValidator implements Validator{
                     break;
                 }
             }
-            code += nextLine + '\n';
+            curFunc.addCodeLine(nextLine);
         }
-        if(code.length()==0)throw new Exception("End of file.. no closing...");
-
-        this.localRam.addFunction(funcName,funcVars,code);
+        if(code.length()==0) return false; //TODO throw new Exception("End of file.. no closing...");
 
 
         return true;

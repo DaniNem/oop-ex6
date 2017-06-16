@@ -10,7 +10,7 @@ import java.util.Iterator;
 public class Function {
     private ArrayList<Variable> vars;
     private String name;
-    private String code;
+    private ArrayList<String> code;
     public Function(String name){
         this.name = name;
         this.vars = new ArrayList<Variable>();
@@ -25,10 +25,10 @@ public class Function {
         return this.name;
 
     }
-    public void setCode(String code){
-        this.code = code;
+    public void addCodeLine(String codeLine){
+        this.code.add(codeLine);
     }
-    public String getCode(){
-        return this.code;
+    public Iterator<String> getCode(){
+        return this.code.iterator();
     }
 }

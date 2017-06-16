@@ -3,6 +3,7 @@ package oop.ex6.main.RAMCollection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Stack;
 
 /**
  * Created by Admin on 15-Jun-17.
@@ -10,20 +11,31 @@ import java.util.NoSuchElementException;
 public class RamCollection  {
     private ArrayList<Variable> variables;
     private ArrayList<Function> functions;
+    private Stack<ArrayList<Variable>> scope;
 
     public RamCollection(){
         this.variables = new ArrayList<Variable>();
         this.functions = new ArrayList<Function>();
     }
-
-    public void addFunction(String funName,Iterable<Variable> funVars,String code){
+    public void openScope(){
+        //TODO this is a bad practice!!!!!
+        this.scope.push((ArrayList<Variable> )this.variables.clone());
+    }
+    public void closeScope(){
+        this.variables = this.scope.pop();
+    }
+    public void addFunction(String funName,Iterable<Variable> funVars){
         Function newFunc = new Function(funName);
-        newFunc.setCode(code);
         for (Variable var:funVars) {
             newFunc.addVar(var);
         }
 
         this.functions.add(newFunc);
+    }
+    public Function addFunction(String funName){
+        Function newFunc = new Function(funName);
+        this.functions.add(newFunc);
+        return newFunc;
     }
     public boolean hasVariable(String varName){
         for (Variable i:this.variables){

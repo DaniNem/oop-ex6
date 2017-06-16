@@ -24,32 +24,35 @@ public class IfWhileValidator implements Validator{
 
     @Override
     public boolean doAction(Iterator<String> lines) {
-        String condition = this.curLine.replaceAll("^(if|while)+\\s*+\\(", "").replaceAll("\\)+.*+\\{","");
+        String condition = this.curLine.replaceAll("^(if|while)+\\s*+\\(", "").replaceAll("\\)+\\s*+\\{","");
         String calledVars =curLine.replaceAll("^[a-zA-Z\\s]*+[(]", "")
                 .replaceAll("[)]+[{]$", "");
-        String[] vars = curLine.split(",");
-        //blockofcode working on making string to vars;
-        throw new Exception("Finish on this...");
-        String code = "";
-        int openSocpeCounter = 0;
-        Validator close = new CloseBlockValidator();
-        Validator open = new OpenBlockValidator();
-        while(lines.hasNext()){
-            String nextLine = lines.next();
-
-            if(open.isTriggered(nextLine)){
-                openSocpeCounter++;
-            }
-            else if (close.isTriggered(nextLine)){
-                openSocpeCounter--;
-                if (openSocpeCounter < -1){
-                    code += nextLine;
-                    break;
+        String[] vars = curLine.split("[\\s.]*(\\|\\|)|(&&)[\\s.]*");
+        //TODO Empty? is it valid
+        for (String str: vars
+             ) {
+            String cond = str.replaceAll("\\s*","");
+            if (this.localRam.hasVariable(cond))
+                {
+                    //if more code needed
+                    continue;
+                }
+            else {
+                if (cond .equals("true")  || cond .equals("false") ){
+                    //if more code needed
+                    continue;
+                }
+                else {
+                    if(AssignVariable.getType(cond)!=null){
+                        continue;
+                    }
+                    //this means youve got to error
+                    return false;
                 }
             }
-            code += nextLine + '\n';
         }
-        if(code.length()==0)throw new Exception("End of file.. no closing...");
+        this.localRam.openScope();
+        return true;
     }
 
     @Override
