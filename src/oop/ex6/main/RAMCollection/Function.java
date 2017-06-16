@@ -1,6 +1,7 @@
 package oop.ex6.main.RAMCollection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -9,20 +10,25 @@ import java.util.Iterator;
 public class Function {
     private ArrayList<Variable> vars;
     private String name;
-    public Function(){
+    private String code;
+    public Function(String name){
+        this.name = name;
         this.vars = new ArrayList<Variable>();
     }
     public void addVar(Variable newVar){
         this.vars.add(newVar);
     }
-    public Iterator<Variable> getVars(){
-        return this.vars.iterator();
+    public Collection<Variable> getVars(){
+        return this.vars;
     }
     public String getName(){
         return this.name;
 
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setCode(String code){
+        this.code = code;
+    }
+    public String getCode(){
+        return this.code;
     }
 }
