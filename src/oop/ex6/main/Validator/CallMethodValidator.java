@@ -17,11 +17,10 @@ public class CallMethodValidator implements Validator{
     public void setParams(RamCollection ram){
         localRam = ram;
     }
-    public Collection<ValidatorResult> doAction(Iterator<String> lines){
-        ArrayList<ValidatorResult> retVal = new ArrayList<ValidatorResult>();
+    public boolean doAction(Iterator<String> lines){
         //go To next line
         lines.next();
-        return retVal;
+        return true;
     }
     public boolean isTriggered(String line){
         return true;
