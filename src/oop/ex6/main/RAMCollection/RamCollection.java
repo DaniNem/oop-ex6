@@ -24,6 +24,7 @@ public class RamCollection  {
     public void closeScope(){
         this.variables = this.scope.pop();
     }
+
     public void addFunction(String funName,Iterable<Variable> funVars){
         Function newFunc = new Function(funName);
         for (Variable var:funVars) {
@@ -37,6 +38,14 @@ public class RamCollection  {
         this.functions.add(newFunc);
         return newFunc;
     }
+
+    public Variable addVariable(String name, String type, String val, boolean isFinal) {
+        Variable newVar = new Variable(name, type, isFinal);
+        newVar.setValue(val);
+        this.variables.add(newVar);
+        return newVar;
+    }
+
     public boolean hasVariable(String varName){
         for (Variable i:this.variables){
             if (i.getName() .equals(varName) ){

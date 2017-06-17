@@ -8,7 +8,6 @@ public class Variable {
     private boolean isFinal;
 
     public Variable(String name,String type,boolean isFinal){
-        //this.scope = "local";
         this.name = name;
         this.type = type;
         this.value = value;
@@ -31,5 +30,11 @@ public class Variable {
         return isFinal;
     }
 
+    public void setValue(String value){
+        this.value = value;
+    }
 
+    public void setFinal(boolean isFinal){
+        this.isFinal = isFinal;
+    }
 }

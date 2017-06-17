@@ -13,8 +13,8 @@ public class EngineValidartor implements Validator{
     private RamCollection ram;
 
     public EngineValidartor(){
-        simpleValidators.add(new AssignVariable());
-        simpleValidators.add(new DeclareVaribleEngineValidator() );
+        simpleValidators.add(new AssignVariableValidator());
+        simpleValidators.add(new DeclareVariableValidator() );
         simpleValidators.add(new DefinedMethodValidator());
     }
     @Override

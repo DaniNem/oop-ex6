@@ -12,8 +12,15 @@ import java.util.regex.Matcher;
  * Created by shani on 16/06/2017.
  */
 public class EndLineValidator implements Validator {
+    private String pattern = "\\s*;\\s*$";
+    private boolean isTriggered = false;
 
-    public boolean isTriggered(String line){
+
+    public boolean isTriggered(String line) {
+        if (line.matches(pattern)) {
+            isTriggered = true;
+            return true;
+        }
         return false;
     }
 
@@ -21,12 +28,7 @@ public class EndLineValidator implements Validator {
     }
 
     public boolean doAction(Iterator<String> lines){
-        Pattern p = Pattern.compile("\\s*;\\s*$");
-        Matcher m = p.matcher(lines.next());
-        if (!m.matches())
-            return false;
-        lines.next();
-        return true;
+        return isTriggered;
     }
 
     public Validator clone(){

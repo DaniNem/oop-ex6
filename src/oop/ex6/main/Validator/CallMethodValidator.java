@@ -37,7 +37,7 @@ public class CallMethodValidator implements Validator{
         for (int i = 0; i < FunctionVarables.length; i++) {
             // in case this in the ram
             if (localRam.hasVariable(vars[i]))
-                if( AssignVariable.isType(localRam.getVariable(vars[i]).getType() , FunctionVarables[i].getType())){
+                if( AssignVariableValidator.isType(localRam.getVariable(vars[i]).getType() , FunctionVarables[i].getType())){
                 //good stuff
                 }
                 else {
@@ -46,7 +46,7 @@ public class CallMethodValidator implements Validator{
                 }
             else {
 
-                if(AssignVariable.isType(AssignVariable.getType(vars[i]),FunctionVarables[i].getType())){
+                if(AssignVariableValidator.isType(AssignVariableValidator.getType(vars[i]),FunctionVarables[i].getType())){
                     //good suff
                 }
                 else {

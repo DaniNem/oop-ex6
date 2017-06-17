@@ -15,7 +15,7 @@ import java.util.Iterator;
 public class Sjavac {
     public Sjavac(){
         // here we going to read the code and put it in a iter.
-        Iterator<String> lines ;
+        Iterator<String> lines;
         RamCollection myRam = new RamCollection();
         Validator engine = new EngineValidartor();
         engine.setParams(myRam);

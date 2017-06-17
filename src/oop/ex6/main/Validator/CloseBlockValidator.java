@@ -10,29 +10,28 @@ import java.util.regex.Matcher;
  * Created by shani on 15/06/2017.
  */
 public class CloseBlockValidator implements Validator {
-    RamCollection localRam;
+    private String pattern = "\\s*\\}\\s*";
+    private boolean isTriggered;
+    private RamCollection localRam;
+
     public boolean isTriggered(String line){
-        Pattern trigger = Pattern.compile("\\s*}");
-        Matcher m = trigger.matcher(line);
-        if (m.lookingAt())
+        if (line.matches(pattern))
             return true;
         return false;
     }
 
     public void setParams(RamCollection params) {
-        this.localRam = params;
+        localRam = params;
     }
 
 
     public boolean doAction(Iterator<String> lines){
-        Pattern linePattern = Pattern.compile("\\s*}\\s*");
-        Matcher m = linePattern.matcher(lines.next());
-        if (!m.matches())
-            return false;
-        if (lines.hasNext())
-            lines.next();
-        this.localRam.closeScope();
-        return true;
+        if (isTriggered){
+            // TDL add error if global scope
+            localRam.closeScope();
+            return true;
+        }
+        return false;
     }
 
     public Validator clone(){

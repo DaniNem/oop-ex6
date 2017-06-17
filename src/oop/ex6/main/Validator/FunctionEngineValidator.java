@@ -8,13 +8,13 @@ import java.util.Iterator;
 /**
  * Created by Admin on 16-Jun-17.
  */
-public class FunctionEngineValidator implements Validator{
-    private ArrayList< Validator> simpleValidators;
+public class FunctionEngineValidator implements Validator {
+    private ArrayList<Validator> simpleValidators;
     private RamCollection ram;
 
-    public EngineValidartor(){
-        simpleValidators.add(new AssignVariable());
-        simpleValidators.add(new DeclareVaribleEngineValidator() );
+    public EngineValidartor() {
+        simpleValidators.add(new AssignVariableValidator());
+        simpleValidators.add(new DeclareVariableValidator());
         simpleValidators.add(new ReturnValidator());
         //What is end of line?
         //simpleValidators.add(new EndLineValidator());
@@ -23,6 +23,7 @@ public class FunctionEngineValidator implements Validator{
         simpleValidators.add(new CloseBlockValidator());
 
     }
+
     @Override
     public boolean isTriggered(String line) {
         return true;
@@ -37,16 +38,17 @@ public class FunctionEngineValidator implements Validator{
     @Override
     public boolean doAction(Iterator<String> lines) {
         boolean triggered;
-        while (lines.hasNext()){
+        while (lines.hasNext()) {
             triggered = false;
             String line = lines.next();
-            for (Validator v:this.simpleValidators){
-                if (v.isTriggered(line)){
+            for (Validator v : this.simpleValidators) {
+                if (v.isTriggered(line)) {
                     triggered = true;
                     v.doAction(lines);
                 }
             }
-            if (!triggered)return false;
+            if (!triggered) return false;
         }
         return true;
     }
+}
