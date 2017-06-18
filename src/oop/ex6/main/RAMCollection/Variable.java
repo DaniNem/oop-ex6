@@ -10,7 +10,6 @@ public class Variable {
     public Variable(String name,String type,boolean isFinal){
         this.name = name;
         this.type = type;
-        this.value = value;
         this.isFinal = isFinal;
     }
 
@@ -22,16 +21,8 @@ public class Variable {
         return type;
     }
 
-    public String getValue(){
-        return value;
-    }
-
     public boolean isFinal(){
         return isFinal;
-    }
-
-    public void setValue(String value){
-        this.value = value;
     }
 
     public void setFinal(boolean isFinal){

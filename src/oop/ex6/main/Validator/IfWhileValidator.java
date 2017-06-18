@@ -43,7 +43,7 @@ public class IfWhileValidator implements Validator{
                     continue;
                 }
                 else {
-                    if(AssignVariable.getType(cond)!=null){
+                    if(AssignVariableValidator.getType(cond)!=null){
                         continue;
                     }
                     //this means youve got to error

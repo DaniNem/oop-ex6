@@ -8,26 +8,23 @@ import java.util.Iterator;
 /**
  * Created by shani on 16/06/2017.
  */
-public class DeclareVariableValidator implements Validator {
+public abstract class DeclareVariableValidator implements Validator {
     protected boolean isFinal;
     private RamCollection ram;
     private String curLine;
     private String finalPattern = "final\\s+";
-    private String declarePattern = "(int)|(double)|(string)|(boolean)|(char)\\s+";
-    private String pattern = finalPattern+"?"+declarePattern;
-    private String type;
+    private String pattern = finalPattern+"?";
     private EndLineValidator endLine = new EndLineValidator();
     private AssignVariableValidator assignVariable = new AssignVariableValidator();
     private Iterator<String> lines;
 
     public boolean isTriggered(String line){
-        if (line.startsWith(pattern)){
+        if (line.startsWith(pattern+getPattern())){
             curLine = line.replaceFirst("\\s","");
             return true;
         }
         return false;
     }
-
 
     public void setParams(RamCollection params){
         ram = params;
@@ -41,9 +38,8 @@ public class DeclareVariableValidator implements Validator {
                 isFinal = true;
                 curLine.replace(finalPattern, "");
             }
-            if (curLine.startsWith(declarePattern)) {
-                type = curLine.split("\\s")[0];
-                curLine.replace(declarePattern, "");
+            if (curLine.startsWith(getPattern())) {
+                curLine.replace(getPattern(), "");
                 String[] param = curLine.split(",");
                 for (String i : param)
                     if (!declare(i))
@@ -54,29 +50,28 @@ public class DeclareVariableValidator implements Validator {
         return false;
     }
 
-
-    public Validator clone(){
-        return new DeclareVariableValidator();
-    }
-
     private boolean declare(String param){
         String pattern = "\\s*[A-Aa-a_]+[A-Za-z_\\d]*\\s*";
         String name = param.replaceFirst("\\s*","").split("\\s")[0];
-        // tdl only in scope
+
         if (!ram.hasVariable(name)) {
             if (param.matches(pattern)) {
-                ram.addVariable(name, type, null, isFinal);
+                ram.addVariable(name, getType(), isFinal);
+                return true;
+            } else if (assignVariable.isTriggered(param)) {
+                Variable var = ram.addVariable(name, getType(), false);
+                assignVariable.setParams(ram);
+                assignVariable.doAction(lines);
+                var.setFinal(isFinal);
                 return true;
             }
-        }else if (assignVariable.isTriggered(param)){
-            Variable var = ram.addVariable(name, type, null, false);
-            assignVariable.setParams(ram);
-            assignVariable.doAction(lines);
-            var.setFinal(isFinal);
-            return true;
         }
         return false;
     }
+
+    protected abstract String getType();
+
+    protected abstract String getPattern();
 
 }
 

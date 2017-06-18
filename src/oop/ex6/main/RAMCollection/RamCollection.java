@@ -1,28 +1,43 @@
 package oop.ex6.main.RAMCollection;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by Admin on 15-Jun-17.
  */
 public class RamCollection  {
     private ArrayList<Variable> variables;
+    private ArrayList<ArrayList <Variable>> globalVariables;
     private ArrayList<Function> functions;
-    private Stack<ArrayList<Variable>> scope;
+    //private Stack<ArrayList<Variable>> scope;
+
 
     public RamCollection(){
         this.variables = new ArrayList<Variable>();
         this.functions = new ArrayList<Function>();
     }
     public void openScope(){
-        //TODO this is a bad practice!!!!!
-        this.scope.push((ArrayList<Variable> )this.variables.clone());
+        ArrayList<Variable> cloned = new ArrayList<Variable>();
+        for (Variable v:this.variables){
+            cloned.add(v);
+        }
+        //this.scope.push(cloned);
+        this.globalVariables.add(cloned);
+        this.variables = new ArrayList<Variable>();
     }
-    public void closeScope(){
-        this.variables = this.scope.pop();
+    //TODO change the exception to specific one
+    public void closeScope() throws Exception
+    {
+        if (!this.globalVariables.isEmpty()){
+              this.variables = this.globalVariables.get(this.globalVariables.size());
+              this.globalVariables.remove(this.globalVariables.size());
+            }
+            else {
+                throw new Exception("pipi kaki");
+            }
+            //this.variables = this.scope.pop();
+
+
     }
 
     public void addFunction(String funName,Iterable<Variable> funVars){
@@ -39,10 +54,8 @@ public class RamCollection  {
         return newFunc;
     }
 
-    public Variable addVariable(String name, String type, String val, boolean isFinal) {
+    public Variable addVariable(String name, String type, boolean isFinal) {
         Variable newVar = new Variable(name, type, isFinal);
-        newVar.setValue(val);
-        this.variables.add(newVar);
         return newVar;
     }
 
@@ -51,6 +64,19 @@ public class RamCollection  {
             if (i.getName() .equals(varName) ){
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean hasVariableGlobal(String varName){
+        for (int i = this.globalVariables.size();i<=0;i--){
+            ArrayList<Variable> curScope = this.globalVariables.get(i);
+            for (Variable v:curScope){
+                if (v.getName() .equals(varName) ){
+                    return true;
+                }
+            }
+
         }
         return false;
     }
@@ -72,6 +98,19 @@ public class RamCollection  {
                     return i;
                 }
             }
+        }
+        throw new NoSuchElementException("No such variable name");
+
+    }
+    public Variable getVariableGlobal(String varName){
+        for (int i = this.globalVariables.size();i<=0;i--){
+            ArrayList<Variable> curScope = this.globalVariables.get(i);
+            for (Variable v:curScope){
+                if (v.getName() .equals(varName) ){
+                    return v;
+                }
+            }
+
         }
         throw new NoSuchElementException("No such variable name");
 

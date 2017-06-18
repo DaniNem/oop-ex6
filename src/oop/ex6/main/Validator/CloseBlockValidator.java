@@ -28,8 +28,12 @@ public class CloseBlockValidator implements Validator {
     public boolean doAction(Iterator<String> lines){
         if (isTriggered){
             // TDL add error if global scope
-            localRam.closeScope();
-            return true;
+            try {
+                localRam.closeScope();
+                return true;
+            }catch (java.lang.Exception e){
+                return false;
+            }
         }
         return false;
     }

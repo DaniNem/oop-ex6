@@ -11,8 +11,10 @@ import java.util.Iterator;
 public class FunctionEngineValidator implements Validator {
     private ArrayList<Validator> simpleValidators;
     private RamCollection ram;
-
-    public EngineValidartor() {
+    public FunctionEngineValidator clone(){
+        return null;
+    }
+    public FunctionEngineValidator() {
         simpleValidators.add(new AssignVariableValidator());
         simpleValidators.add(new DeclareVariableValidator());
         simpleValidators.add(new ReturnValidator());
