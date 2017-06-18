@@ -43,7 +43,9 @@ public class AssignVariableValidator implements Validator {
             }
         }
         return false;
+        //throw new Exception("AssignVariableValidator");
     }
+
 
     public Validator clone(){
         return new AssignVariableValidator();

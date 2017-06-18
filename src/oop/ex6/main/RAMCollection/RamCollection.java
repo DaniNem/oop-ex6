@@ -102,6 +102,10 @@ public class RamCollection  {
         throw new NoSuchElementException("No such variable name");
 
     }
+    public Iterator<Variable> getAllVariables(){
+        return this.variables.iterator();
+
+    }
     public Variable getVariableGlobal(String varName){
         for (int i = this.globalVariables.size();i<=0;i--){
             ArrayList<Variable> curScope = this.globalVariables.get(i);

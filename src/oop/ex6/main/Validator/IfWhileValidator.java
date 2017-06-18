@@ -1,6 +1,7 @@
 package oop.ex6.main.Validator;
 
 import oop.ex6.main.RAMCollection.RamCollection;
+import oop.ex6.main.RAMCollection.Variable;
 
 import java.util.Iterator;
 
@@ -24,15 +25,26 @@ public class IfWhileValidator implements Validator{
 
     @Override
     public boolean doAction(Iterator<String> lines) {
+        String allowed = "(true)|(false)|(-?\\d+.\\d+)|(-?\\d)";
         String condition = this.curLine.replaceAll("^(if|while)+\\s*+\\(", "").replaceAll("\\)+\\s*+\\{","");
         String calledVars =curLine.replaceAll("^[a-zA-Z\\s]*+[(]", "")
                 .replaceAll("[)]+[{]$", "");
         String[] vars = curLine.split("[\\s.]*(\\|\\|)|(&&)[\\s.]*");
         //TODO Empty? is it valid
-        for (String str: vars
-             ) {
+        for (String str: vars) {
             String cond = str.replaceAll("\\s*","");
-            if (this.localRam.hasVariable(cond))
+            //TODO SOLEVE IT
+            //this.localRam.addVariable("IFWHILE","(true)|(false)|(-?\\d+.\\d+)|(-?\\d)",false);
+            //if(!AssignVariableValidator.TT("IFWHILE",cond,this.localRam))return false;
+            if (this.localRam.hasVariable(cond)) {
+                Variable var = localRam.getVariable(cond);
+                if (!var.getType().matches(allowed))return false;
+                }
+            else if (!cond.matches(allowed)) {
+                return false;
+
+            }
+            /*if (this.localRam.hasVariable(cond))
                 {
                     //if more code needed
                     continue;
@@ -49,7 +61,7 @@ public class IfWhileValidator implements Validator{
                     //this means youve got to error
                     return false;
                 }
-            }
+            }*/
         }
         this.localRam.openScope();
         return true;

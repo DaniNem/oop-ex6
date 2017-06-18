@@ -27,6 +27,7 @@ public class CallMethodValidator implements Validator{
         this.localRam = ram;
     }
     public boolean doAction(Iterator<String> lines) {
+        Validator assgin = new AssignVariableValidator();
         String calledVars = curLine.replace("^[a-zA-Z]*+[(]", "")
                 .replace(");", "");
         String[] vars = curLine.split(",");
@@ -35,24 +36,27 @@ public class CallMethodValidator implements Validator{
         //error!!!
         if (FunctionVarables.length != vars.length) return false;
         for (int i = 0; i < FunctionVarables.length; i++) {
+
             // in case this in the ram
             if (localRam.hasVariable(vars[i]))
-                if( AssignVariableValidator.isType(localRam.getVariable(vars[i]).getType() , FunctionVarables[i].getType())){
+                //if( AssignVariableValidator.isType(localRam.getVariable(vars[i]).getType() , FunctionVarables[i].getType())){
+                if( !localRam.getVariable(vars[i]).getType().equals(FunctionVarables[i].getType()))             return false;
+           /* {
                 //good stuff
                 }
                 else {
                     //bad stuff
-                    return false;
-                }
+
+                }*/
             else {
 
-                if(AssignVariableValidator.isType(AssignVariableValidator.getType(vars[i]),FunctionVarables[i].getType())){
+                if(!FunctionVarables[i].getType().matches((vars[i])))return false;/*{
                     //good suff
                 }
                 else {
                     //bad stuff
-                    return false;
-                }
+
+                }*/
             }
         }
         return true;

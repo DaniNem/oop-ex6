@@ -4,6 +4,8 @@ import oop.ex6.main.RAMCollection.Function;
 import oop.ex6.main.RAMCollection.RamCollection;
 import oop.ex6.main.RAMCollection.Variable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
@@ -36,11 +38,31 @@ public class DefinedMethodValidator implements Validator{
         curFunc.addCodeLine(this.curLine);
         String calledVars =curLine.replaceAll("^[a-zA-Z\\s]*+[(]", "")
                 .replaceAll("[)]+[{]$", "");
-        String[] vars = curLine.split(",");
+        //String[] vars = curLine.split(",");
+        Iterator<String> vars =
+                new  ArrayList<String>(Arrays.asList(curLine.split(","))).iterator();
+
+
         //blockofcode working on making string to vars;
 
-        throw new Exception("Finish on this...");
+
+        RamCollection temp = new RamCollection();
+        Validator validatorVars = new VariableDeclareEngine();
+        validatorVars.setParams(temp);
+        while (vars.hasNext()){
+            String line  = vars.next();
+            validatorVars.isTriggered(line);
+            //TODO in case of exception!!!
+            validatorVars.doAction(vars);
+        }
+        //throw new Exception("Finish on this...");
         //curFunc.addVar();
+
+        //Adding vars to the function object
+        Iterator<Variable> funcVars = temp.getAllVariables();
+        while (funcVars.hasNext()){
+            curFunc.addVar(funcVars.next());
+        }
 
 
         String code = "";

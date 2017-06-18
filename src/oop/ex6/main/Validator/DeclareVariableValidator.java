@@ -18,6 +18,7 @@ public abstract class DeclareVariableValidator implements Validator {
     private AssignVariableValidator assignVariable = new AssignVariableValidator();
     private Iterator<String> lines;
 
+
     public boolean isTriggered(String line){
         if (line.startsWith(pattern+getPattern())){
             curLine = line.replaceFirst("\\s","");
