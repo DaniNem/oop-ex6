@@ -1,0 +1,54 @@
+daninem
+shani1
+
+
+
+=============================
+=      File description     =
+=============================
+AvlTree.java - implements a AvlTree.
+Node.java - implements a Node class:
+    - The node class is pretty dummy, it has getter's and
+    setters for it's internal properties.
+
+README - This file.
+=============================
+=  Implementation details   =
+=============================
+I've implemented my own node class,
+and the AvlTree has a internal pointer of this type.
+I've also added few functions to the program that I
+did'nt write in the UML, such as heightUpdate,checkAvlCondition and calcBalance.
+Those function are only making the code be more organized, and I didn't think the
+ would be necessary before I started to implement.
+
+ Add\Delete implementation - I'm calling a new function that implements add in recursion,
+ the adding is straightforward as in simple binary search tree.
+ The delete method is built according the same idea, they both are using calcBalance,checkAvlCondition,
+ leftRotate,rightRotate method, that is simply because both of them are also balancing the tree.
+
+FacadeFile itself is our object representation of every file in theilter is an interface, his implementations hold the 'instructions' of the filter command. receives an
+Iterator<FacadeFile> that iterates through the represented directory files, and returns a new iterator of a
+new FacadeFile collection after it has been filtered.
+
+=============================
+=    Theoretical Questions   =
+=============================
+
+
+● 1. Find a series of 12 numbers, such that when they are inserted into an empty AVL tree
+  one-by-one, the result will be a tree of height 4 (insertions only, no deletions).
+  [5,3,8,2,4,7,10,9,6,1,11,12];
+
+
+● What is the asymptotic running time complexity of your tree construction from an array of
+  length n done in AvlTree(int[] data)?
+   I assumed that the array is not sortted so it's nlogn, why?
+   because the there are n elements in the array, and the asymptotic adding time is
+   O(h)=O(log(n)),
+
+
+● What is the asymptotic running time complexity of your tree construction done in AvlTree(AvlTree
+  avlTree)?
+  It is simple O(n), because if the array sorted (a AVL tree gives a sorted tree for o(n)),
+  the insert is faster, we insert the node to the right place from the beginning.

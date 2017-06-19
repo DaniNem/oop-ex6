@@ -16,56 +16,49 @@ public class CallMethodValidator implements Validator{
     private RamCollection localRam;
     private Function currentFunction;
     private String curLine;
-    public CallMethodValidator clone(){
-        CallMethodValidator retVal =  new CallMethodValidator();
-        retVal.localRam = this.localRam;
-        retVal.currentFunction = this.currentFunction;
-        retVal.curLine = this.curLine;
-        return retVal;
+    private Validator EOL;
+
+    public CallMethodValidator(){
+        this.EOL = new EndLineValidator();
     }
+
     public void setParams(RamCollection ram){
         this.localRam = ram;
     }
-    public boolean doAction(Iterator<String> lines) {
-        Validator assgin = new AssignVariableValidator();
-        String calledVars = curLine.replace("^[a-zA-Z]*+[(]", "")
-                .replace(");", "");
-        String[] vars = curLine.split(",");
+
+    public boolean doAction(Iterator<String> lines) throws Exception {
+        if(!this.EOL.isTriggered(this.curLine))throw new Exception("No ;");
+        else {this.curLine = this.curLine.replaceAll((";$"),"");}
+        String calledVars = curLine.replaceAll(".*\\(", "")
+                .replaceAll("\\)+[.]*", "");
+        String[] vars;
+        if (!calledVars.equals(""))vars = calledVars.split(",");
+        else vars = new String[0];
+
         Variable[] FunctionVarables =  currentFunction.getVars().
                 toArray(new Variable[ currentFunction.getVars().size()]);
         //error!!!
-        if (FunctionVarables.length != vars.length) return false;
+        if (FunctionVarables.length != vars.length) throw new Exception("The num of parameters are not good");
         for (int i = 0; i < FunctionVarables.length; i++) {
 
             // in case this in the ram
-            if (localRam.hasVariable(vars[i]))
-                //if( AssignVariableValidator.isType(localRam.getVariable(vars[i]).getType() , FunctionVarables[i].getType())){
-                if( !localRam.getVariable(vars[i]).getType().equals(FunctionVarables[i].getType()))             return false;
-           /* {
-                //good stuff
-                }
-                else {
-                    //bad stuff
-
-                }*/
-            else {
-
-                if(!FunctionVarables[i].getType().matches((vars[i])))return false;/*{
-                    //good suff
-                }
-                else {
-                    //bad stuff
-
-                }*/
+            if (localRam.hasVariable(vars[i].trim())) {
+                if (!localRam.getVariable(vars[i]).getType().equals(FunctionVarables[i].getType()))
+                    throw new Exception("Bad type kaki!!");
+            }else {
+                if(!vars[i].trim().matches(FunctionVarables[i].getType()))throw new Exception("Bad type kaki!!");
             }
         }
         return true;
     }
     public boolean isTriggered(String line){
+        //line = line.replaceFirst(";","");
         ArrayList<String> patterns = new ArrayList<String>();
         for (Iterator<Function> iter = this.localRam.getAllFunction(); iter.hasNext();) {
             Function cur = iter.next();
-            if (line.matches("^"+cur.getName())){
+            //System.out.println(line.replaceAll("[\\s\\t]*",""));
+            //System.out.println(line.trim());
+            if (line.replaceAll("[\\s\\t]*","").matches("^"+cur.getName()+"\\(.*\\);")){
                 currentFunction = cur;
                 curLine = line;
                 return true;
@@ -76,3 +69,10 @@ public class CallMethodValidator implements Validator{
     }
 }
 
+   /* public CallMethodValidator clone(){
+        CallMethodValidator retVal =  new CallMethodValidator();
+        retVal.localRam = this.localRam;
+        retVal.currentFunction = this.currentFunction;
+        retVal.curLine = this.curLine;
+        return retVal;
+    }*/

@@ -11,8 +11,8 @@ public class ReturnValidator implements Validator {
     String curLine;
     @Override
     public boolean isTriggered(String line) {
-        this.curLine = curLine;
-        String pattern = "^return;";
+        this.curLine = line;
+        String pattern = "^[\\t\\s]*return;";
         return line.matches(pattern);
     }
 

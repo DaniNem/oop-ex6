@@ -11,7 +11,7 @@ import java.util.Iterator;
 public interface Validator{
     public abstract boolean isTriggered(String line);
     public abstract void setParams(RamCollection params);
-    public abstract boolean doAction(Iterator<String> lines);
+    public abstract boolean doAction(Iterator<String> lines) throws Exception;
     //public abstract Validator clone();
     
 }

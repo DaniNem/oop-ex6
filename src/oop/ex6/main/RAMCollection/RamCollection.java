@@ -9,17 +9,16 @@ public class RamCollection  {
     private ArrayList<Variable> variables;
     private ArrayList<ArrayList <Variable>> globalVariables;
     private ArrayList<Function> functions;
-    //private Stack<ArrayList<Variable>> scope;
-
 
     public RamCollection(){
         this.variables = new ArrayList<Variable>();
+        this.globalVariables = new  ArrayList<ArrayList <Variable>> ();
         this.functions = new ArrayList<Function>();
     }
     public void openScope(){
         ArrayList<Variable> cloned = new ArrayList<Variable>();
-        for (Variable v:this.variables){
-            cloned.add(v);
+        for (Variable v: this.variables){
+            cloned.add(v.clone());
         }
         //this.scope.push(cloned);
         this.globalVariables.add(cloned);
@@ -29,15 +28,13 @@ public class RamCollection  {
     public void closeScope() throws Exception
     {
         if (!this.globalVariables.isEmpty()){
-              this.variables = this.globalVariables.get(this.globalVariables.size());
-              this.globalVariables.remove(this.globalVariables.size());
+              this.variables = this.globalVariables.get(this.globalVariables.size()-1);
+              this.globalVariables.remove(this.globalVariables.size()-1);
             }
             else {
                 throw new Exception("pipi kaki");
             }
             //this.variables = this.scope.pop();
-
-
     }
 
     public void addFunction(String funName,Iterable<Variable> funVars){
@@ -56,7 +53,11 @@ public class RamCollection  {
 
     public Variable addVariable(String name, String type, boolean isFinal) {
         Variable newVar = new Variable(name, type, isFinal);
+        this.variables.add(newVar);
         return newVar;
+    }
+    public void addVariable(Variable var) {
+        this.variables.add(var);
     }
 
     public boolean hasVariable(String varName){
@@ -69,7 +70,7 @@ public class RamCollection  {
     }
 
     public boolean hasVariableGlobal(String varName){
-        for (int i = this.globalVariables.size();i<=0;i--){
+        for (int i = this.globalVariables.size()-1;i>=0;i--){
             ArrayList<Variable> curScope = this.globalVariables.get(i);
             for (Variable v:curScope){
                 if (v.getName() .equals(varName) ){
@@ -107,7 +108,7 @@ public class RamCollection  {
 
     }
     public Variable getVariableGlobal(String varName){
-        for (int i = this.globalVariables.size();i<=0;i--){
+        for (int i = this.globalVariables.size()-1;i>=0;i--){
             ArrayList<Variable> curScope = this.globalVariables.get(i);
             for (Variable v:curScope){
                 if (v.getName() .equals(varName) ){

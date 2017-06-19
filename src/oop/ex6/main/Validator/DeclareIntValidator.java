@@ -5,11 +5,14 @@ package oop.ex6.main.Validator;
  */
 
 public class DeclareIntValidator extends DeclareVariableValidator{
-    private String pattern = "int\\s+";
+    private String pattern = "[a-zA-Z\\s]*int[\\s\\t]*((_[a-zA-Z])|([a-zA-Z]))[a-zA-Z_]*.*";
     private String typePattern = "(-?\\d)";
 
     protected String getPattern(){
         return pattern;
+    }
+    protected String getPatternA(){
+        return "^\\s*int\\s*";
     }
 
     protected String getType(){

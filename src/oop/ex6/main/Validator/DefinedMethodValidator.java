@@ -18,7 +18,7 @@ public class DefinedMethodValidator implements Validator{
     private String curLine;
     @Override
     public boolean isTriggered(String line) {
-        String Prefix = "^void\\s[^_][\\w]*+[(]+[\\w\\s]*+[)]+[{]$";
+        String Prefix =  "[\\t\\s]*void[\\t\\s]*[A-Za-z][A-Za-z_\\d]*[\\t\\s]*\\([\\s\\t\\dA-Za-z_,]*\\)[\\s\\t]*(\\{[\\t\\s]*)$";
         if (line.matches(Prefix)){
             this.curLine = line;
             return true;
@@ -28,19 +28,20 @@ public class DefinedMethodValidator implements Validator{
 
     @Override
     public void setParams(RamCollection params) {
+        this.localRam = params;
 
     }
 
     @Override
-    public boolean doAction(Iterator<String> lines) {
-        String funcName = this.curLine.replaceAll("^void+\\s", "").replaceAll("\\(+.*","");
+    public boolean doAction(Iterator<String> lines) throws Exception{
+        String funcName = this.curLine.replaceAll("(void)|\\t|\\s*", "").replaceAll("\\(+.*","");
         Function curFunc = this.localRam.addFunction(funcName);
         curFunc.addCodeLine(this.curLine);
-        String calledVars =curLine.replaceAll("^[a-zA-Z\\s]*+[(]", "")
-                .replaceAll("[)]+[{]$", "");
+        /*String calledVars =curLine.replaceAll("^[a-zA-Z\\s]*+[(]", "")
+                .replaceAll("[)]++[{]$", "");*/
         //String[] vars = curLine.split(",");
         Iterator<String> vars =
-                new  ArrayList<String>(Arrays.asList(curLine.split(","))).iterator();
+                new  ArrayList<String>(Arrays.asList(curLine.replaceAll("(.*[(])|([)].*)","").split(","))).iterator();
 
 
         //blockofcode working on making string to vars;
@@ -50,10 +51,14 @@ public class DefinedMethodValidator implements Validator{
         Validator validatorVars = new VariableDeclareEngine();
         validatorVars.setParams(temp);
         while (vars.hasNext()){
-            String line  = vars.next();
-            validatorVars.isTriggered(line);
-            //TODO in case of exception!!!
-            validatorVars.doAction(vars);
+            String line  = vars.next().trim();
+            if(!line.equals("")){
+                line+=";";
+                if(validatorVars.isTriggered(line)){
+                    validatorVars.doAction(vars);}
+                else throw new Exception("Cant tell the var type");
+            }
+
         }
         //throw new Exception("Finish on this...");
         //curFunc.addVar();
@@ -61,12 +66,13 @@ public class DefinedMethodValidator implements Validator{
         //Adding vars to the function object
         Iterator<Variable> funcVars = temp.getAllVariables();
         while (funcVars.hasNext()){
-            curFunc.addVar(funcVars.next());
+            Variable t =funcVars.next();
+            t.setHasValue(true);
+            curFunc.addVar(t);
         }
 
 
-        String code = "";
-        int openSocpeCounter = 0;
+        int openSocpeCounter = 1;
         Validator close = new CloseBlockValidator();
         Validator open = new OpenBlockValidator();
         while(lines.hasNext()){
@@ -77,16 +83,14 @@ public class DefinedMethodValidator implements Validator{
             }
             else if (close.isTriggered(nextLine)){
                 openSocpeCounter--;
-                if (openSocpeCounter < -1){
-                    code += nextLine;
-                    break;
+                if (openSocpeCounter == 0){
+                    curFunc.addCodeLine(nextLine);
+                    return true;
+
                 }
             }
             curFunc.addCodeLine(nextLine);
         }
-        if(code.length()==0) return false; //TODO throw new Exception("End of file.. no closing...");
-
-
         return true;
     }
 

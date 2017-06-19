@@ -11,6 +11,8 @@ import java.util.Iterator;
 public class VariableDeclareEngine implements Validator {
     private ArrayList<Validator> simpleValidators;
     private RamCollection ram;
+    private String curLine;
+    Validator trigValidator;
     public FunctionEngineValidator clone(){
         return null;
     }
@@ -24,11 +26,20 @@ public class VariableDeclareEngine implements Validator {
         this.simpleValidators.add(new DeclareIntValidator());
         this.simpleValidators.add(new DeclareDoubleValidator());
 
+
     }
 
     @Override
     public boolean isTriggered(String line) {
-        return true;
+        this.curLine = line;
+        for (Validator v : this.simpleValidators) {
+            v.setParams(this.ram);
+            if (v.isTriggered(line)) {
+                this.trigValidator = v;
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -38,20 +49,7 @@ public class VariableDeclareEngine implements Validator {
     }
 
     @Override
-    public boolean doAction(Iterator<String> lines) {
-        boolean triggered;
-        while (lines.hasNext()) {
-            triggered = false;
-            String line = lines.next();
-            for (Validator v : this.simpleValidators) {
-                if (v.isTriggered(line)) {
-                    triggered = true;
-                    v.doAction(lines);
-                    break;
-                }
-            }
-            if (!triggered) return false;
-        }
-        return true;
+    public boolean doAction(Iterator<String> lines) throws Exception{
+        return this.trigValidator.doAction(lines);
     }
 }

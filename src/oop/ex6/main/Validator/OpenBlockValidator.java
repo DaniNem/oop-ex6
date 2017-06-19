@@ -13,9 +13,11 @@ public class OpenBlockValidator implements Validator {
     RamCollection localRam;
 
     public boolean isTriggered(String line){
-        Pattern trigger = Pattern.compile("^(\\{)|([.//s]*+\\{)");
-        Matcher m = trigger.matcher(line);
-        if (m.lookingAt())
+        //Pattern trigger = Pattern.compile("^(\\{)|([.//s]*+\\{)");
+        //Pattern trigger = Pattern.compile(".*+\\{$");
+        String trigger = ".*(\\{+\\s*)$";
+        //Matcher m = trigger.matcher(line);
+        if (line.matches(trigger))
             return true;
         return false;
     }
@@ -32,7 +34,7 @@ public class OpenBlockValidator implements Validator {
         //    return false;
        // if (lines.hasNext())
        //     lines.next();
-        this.localRam.openScope();
+        //this.localRam.openScope();
         return true;
     }
 

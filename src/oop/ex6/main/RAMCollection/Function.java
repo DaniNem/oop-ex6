@@ -13,6 +13,7 @@ public class Function {
     private ArrayList<String> code;
     public Function(String name){
         this.name = name;
+        this.code = new ArrayList<String>();
         this.vars = new ArrayList<Variable>();
     }
     public void addVar(Variable newVar){

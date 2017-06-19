@@ -13,13 +13,17 @@ public class EngineValidator implements Validator{
     private RamCollection ram;
 
     public EngineValidator(){
-        this.simpleValidators = new ArrayList< Validator>();
+        this.simpleValidators = new ArrayList<Validator>();
         this.simpleValidators.add(new AssignVariableValidator());
         this.simpleValidators.add(new VariableDeclareEngine() );
         this.simpleValidators.add(new DefinedMethodValidator());
+        this.simpleValidators.add(new CommentValidator());
+        this.simpleValidators.add(new TabsAndSpaceValidator());
     }
     @Override
-    public boolean isTriggered(String line) {
+    public boolean isTriggered(String line)
+    {
+
         return true;
     }
 
@@ -30,7 +34,7 @@ public class EngineValidator implements Validator{
     }
 
     @Override
-    public boolean doAction(Iterator<String> lines) {
+    public boolean doAction(Iterator<String> lines) throws Exception{
         boolean triggered;
         while (lines.hasNext()){
             triggered = false;
@@ -40,9 +44,10 @@ public class EngineValidator implements Validator{
                 if (v.isTriggered(line)){
                     triggered = true;
                     v.doAction(lines);
+                    break;
                 }
             }
-            if (!triggered)return false;
+            if (!triggered)throw new Exception("No trigger in engine");
         }
         return true;
     }

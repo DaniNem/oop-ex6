@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
  * Created by shani on 16/06/2017.
  */
 public class EndLineValidator implements Validator {
-    private String pattern = "\\s*;\\s*$";
+    private String pattern = ".*;$";
     private boolean isTriggered = false;
 
 
